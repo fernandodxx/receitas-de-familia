@@ -1,0 +1,109 @@
+<%= form_with model: recipe, class: 'space-y-6' do |f| %>
+  <% if recipe.errors.any? %>
+    <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+      <h3 class="text-red-800 font-medium mb-2">
+        <%= pluralize(recipe.errors.count, 'erro') %> impediram o salvamento:
+      </h3>
+      <ul class="list-disc list-inside text-red-700 text-sm">
+        <% recipe.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <!-- Título -->
+  <div>
+    <%= f.label :title, 'Título da Receita', class: 'block text-sm font-medium text-gray-700 mb-1' %>
+    <%= f.text_field :title,
+        class: 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-terracota',
+        placeholder: 'Ex: Bolo de Cenoura da Vovó' %>
+  </div>
+
+  <!-- Descrição -->
+  <div>
+    <%= f.label :description, 'Descrição', class: 'block text-sm font-medium text-gray-700 mb-1' %>
+    <%= f.text_area :description, rows: 3,
+        class: 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-terracota',
+        placeholder: 'Uma breve descrição sobre a receita e sua história...' %>
+  </div>
+
+  <!-- Categorias em Grid -->
+  <div class="grid md:grid-cols-3 gap-4">
+    <div>
+      <%= f.label :category, 'Categoria', class: 'block text-sm font-medium text-gray-700 mb-1' %>
+      <%= f.select :category,
+          Recipe.categories.keys.map { |c| [c.humanize, c] },
+          { prompt: 'Selecione...' },
+          class: 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-terracota' %>
+    </div>
+
+    <div>
+      <%= f.label :region, 'Região', class: 'block text-sm font-medium text-gray-700 mb-1' %>
+      <%= f.select :region,
+          Recipe.regions.keys.map { |r| [r.humanize, r] },
+          { prompt: 'Selecione...' },
+          class: 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-terracota' %>
+    </div>
+
+    <div>
+      <%= f.label :occasion, 'Ocasião', class: 'block text-sm font-medium text-gray-700 mb-1' %>
+      <%= f.select :occasion,
+          Recipe.occasions.keys.map { |o| [o.humanize, o] },
+          { prompt: 'Selecione...' },
+          class: 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-terracota' %>
+    </div>
+  </div>
+
+  <!-- URL da Imagem e Info -->
+  <div class="grid md:grid-cols-3 gap-4">
+    <div class="md:col-span-2">
+      <%= f.label :image_url, 'URL da Imagem', class: 'block text-sm font-medium text-gray-700 mb-1' %>
+      <%= f.url_field :image_url,
+          class: 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-terracota',
+          placeholder: 'https://exemplo.com/imagem.jpg' %>
+      <p class="text-xs text-gray-500 mt-1">Cole o link de uma imagem hospedada (Imgur, Cloudinary, etc.)</p>
+    </div>
+
+    <div class="flex gap-4">
+      <div class="flex-1">
+        <%= f.label :prep_time, 'Tempo (min)', class: 'block text-sm font-medium text-gray-700 mb-1' %>
+        <%= f.number_field :prep_time, min: 1,
+            class: 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-terracota' %>
+      </div>
+
+      <div class="flex-1">
+        <%= f.label :servings, 'Porções', class: 'block text-sm font-medium text-gray-700 mb-1' %>
+        <%= f.number_field :servings, min: 1,
+            class: 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-terracota' %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ingredientes -->
+  <div>
+    <%= f.label :ingredients, 'Ingredientes', class: 'block text-sm font-medium text-gray-700 mb-1' %>
+    <p class="text-xs text-gray-500 mb-2">Um ingrediente por linha</p>
+    <%= f.text_area :ingredients, rows: 8,
+        class: 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-terracota font-mono text-sm',
+        placeholder: "2 xícaras de farinha de trigo&#10;1 xícara de açúcar&#10;3 ovos&#10;..." %>
+  </div>
+
+  <!-- Modo de Preparo -->
+  <div>
+    <%= f.label :instructions, 'Modo de Preparo', class: 'block text-sm font-medium text-gray-700 mb-1' %>
+    <p class="text-xs text-gray-500 mb-2">Um passo por linha</p>
+    <%= f.text_area :instructions, rows: 10,
+        class: 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-terracota',
+        placeholder: "Pré-aqueça o forno a 180°C.&#10;Misture os ingredientes secos em uma tigela.&#10;..." %>
+  </div>
+
+  <!-- Botões -->
+  <div class="flex gap-4 pt-4">
+    <%= f.submit recipe.persisted? ? 'Atualizar Receita' : 'Criar Receita',
+        class: 'btn-primary cursor-pointer' %>
+
+    <%= link_to 'Cancelar', recipe.persisted? ? recipe : root_path,
+        class: 'bg-gray-100 text-gray-700 px-6 py-2 rounded-full font-medium hover:bg-gray-200 transition' %>
+  </div>
+<% end %>

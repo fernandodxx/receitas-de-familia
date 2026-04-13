@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><%= content_for?(:title) ? yield(:title) : "Receitas de Família | Comida Caseira Tradicional" %></title>
+    <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Descubra receitas tradicionais de família. Comida caseira da vovó com amor e tradição." %>">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Receitas de Família">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%= stylesheet_link_tag :app %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="min-h-screen flex flex-col bg-[#F9F7F2] text-gray-900">
+    <%= render 'shared/navigation' %>
+
+    <main class="flex-grow">
+      <% if notice %>
+        <div class="bg-green-600 text-white px-6 py-3 text-center" role="alert">
+          <%= notice %>
+        </div>
+      <% end %>
+
+      <% if alert %>
+        <div class="bg-red-600 text-white px-6 py-3 text-center" role="alert">
+          <%= alert %>
+        </div>
+      <% end %>
+
+      <%= yield %>
+    </main>
+
+    <%= render 'shared/footer' %>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+<% content_for :title, "Nova Receita | Receitas de Família" %>
+
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900" style="font-family: 'Playfair Display', serif;">
+      Nova Receita
+    </h1>
+    <p class="text-gray-600 mt-2">Compartilhe sua receita de família com o mundo.</p>
+  </div>
+
+  <div class="bg-white p-8 rounded-xl shadow-sm">
+    <%= render 'form', recipe: @recipe %>
+  </div>
+</div>

@@ -1,0 +1,141 @@
+<!-- MONETIZAÇÃO: Espaço para banner AdSense - topo da homepage -->
+
+<% content_for :title, "Receitas Tradicionais de Família" %>
+<% content_for :description, "Descubra receitas tradicionais de família. Comida caseira da vovó com amor e tradição brasileira." %>
+
+<!-- Seção de Título -->
+<div class="bg-white border-b">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <% if @region_title %>
+      <h1 class="text-4xl font-bold text-gray-900 mb-2" style="font-family: 'Playfair Display', serif;">
+        <%= @region_title %>
+      </h1>
+      <p class="text-gray-600">Receitas típicas e tradicionais desta região do Brasil.</p>
+    <% elsif @occasion_title %>
+      <h1 class="text-4xl font-bold text-gray-900 mb-2" style="font-family: 'Playfair Display', serif;">
+        <%= @occasion_title %>
+      </h1>
+      <p class="text-gray-600">Receitas especiais para este momento.</p>
+    <% elsif @category_title %>
+      <h1 class="text-4xl font-bold text-gray-900 mb-2" style="font-family: 'Playfair Display', serif;">
+        <%= @category_title %>
+      </h1>
+      <p class="text-gray-600">Deliciosas receitas desta categoria.</p>
+    <% else %>
+      <h1 class="text-4xl font-bold text-gray-900 mb-2" style="font-family: 'Playfair Display', serif;">
+        Receitas de Família
+      </h1>
+      <p class="text-gray-600">Descubra o sabor da tradição brasileira.</p>
+    <% end %>
+  </div>
+</div>
+
+<!-- Receita em Destaque -->
+<% if @featured_recipe && !@region_title && !@occasion_title && !@category_title %>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="recipe-card bg-white card-organic overflow-hidden shadow-lg">
+      <div class="grid md:grid-cols-2">
+        <% if @featured_recipe.image_url.present? %>
+          <div class="h-64 md:h-auto">
+            <img src="<%= @featured_recipe.image_url %>" alt="<%= @featured_recipe.title %>"
+                 class="w-full h-full object-cover">
+          </div>
+        <% end %>
+
+        <div class="p-8 flex flex-col justify-center">
+          <span class="text-terracota text-sm font-semibold uppercase tracking-wide mb-2">Receita em Destaque</span>
+          <h2 class="text-3xl font-bold text-gray-900 mb-4" style="font-family: 'Playfair Display', serif;">
+            <%= link_to @featured_recipe.title, @featured_recipe, class: 'hover:text-terracota transition' %>
+          </h2>
+          <p class="text-gray-600 mb-6 line-clamp-3">
+            <%= @featured_recipe.description %>
+          </p>
+
+          <div class="flex flex-wrap gap-4 text-sm text-gray-500 mb-6">
+            <% if @featured_recipe.prep_time %>
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <%= @featured_recipe.prep_time %> min
+              </span>
+            <% end %>
+            <% if @featured_recipe.servings %>
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
+                <%= @featured_recipe.servings %> porções
+              </span>
+            <% end %>
+          </div>
+
+          <%= link_to 'Ver Receita', @featured_recipe,
+              class: 'inline-flex items-center text-terracota font-semibold hover:underline' %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<!-- Editoriais -->
+<% if !@region_title && !@occasion_title && !@category_title %>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+    <h2 class="text-2xl font-bold text-gray-900 mb-6" style="font-family: 'Playfair Display', serif;">
+      Explore por Categoria
+    </h2>
+
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+      <% [
+        ['entrada', 'Entradas'],
+        ['prato_principal', 'Pratos Principais'],
+        ['sobremesa', 'Sobremesas'],
+        ['bebida', 'Bebidas'],
+        ['acompanhamento', 'Acompanhamentos']
+      ].each do |cat, label| %>
+        <%= link_to category_path(cat), class: 'group' do %>
+          <div class="bg-white p-6 rounded-xl shadow-sm text-center group-hover:shadow-md transition border-organic">
+            <span class="text-terracota font-semibold group-hover:text-marrom-argila transition">
+              <%= label %>
+            </span>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<!-- Grid de Receitas -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+  <% if @recipes.any? %>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+      <% @recipes.each do |recipe| %>
+        <%= render 'recipes/recipe_card', recipe: recipe %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="text-center py-16">
+      <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+      </svg>
+      <p class="text-gray-500 text-lg mb-4">Nenhuma receita encontrada.</p>
+      <%= link_to 'Cadastrar Primeira Receita', new_recipe_path,
+          class: 'btn-primary inline-block' %>
+    </div>
+  <% end %>
+</div>
+
+<!-- MONETIZAÇÃO: Espaço para banner AdSense - rodapé da homepage -->
+
+<!-- Schema.org JSON-LD para Homepage -->
+<% content_for :head do %>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Receitas de Família",
+    "description": "Descubra receitas tradicionais de família. Comida caseira da vovó com amor e tradição.",
+    "url": "<%= root_url %>"
+  }
+  </script>
+<% end %>
